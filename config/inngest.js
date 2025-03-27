@@ -1,7 +1,7 @@
 import { Inngest } from "inngest";
 import User from "@/models/User"; // Import the User model
 import dbConnect from "./db";
-import { use } from "react";
+//import { use } from "react";
 import Order from "@/models/order";
 
 // Create a client to send and receive events
@@ -60,7 +60,7 @@ export const syncUserDeletion = inngest.createFunction(
   }
 );
 
-// create inngest function to create user's order in the mongodatabase
+// create inngest function to save user's order in the mongodatabase
 export const createUserOrder = inngest.createFunction(
   {
     id: "create-user-order",
