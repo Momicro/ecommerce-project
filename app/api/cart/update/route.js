@@ -7,7 +7,7 @@ import { getAuth } from "@clerk/nextjs/server";
 export async function POST(request) {
   try {
     const { userId } = getAuth(request);
-    const cartData = await request.json();
+    const { cartData } = await request.json();
 
     await connectDB();
     const user = await User.findById(userId);
@@ -16,6 +16,7 @@ export async function POST(request) {
     }
 
     user.cartItems = cartData;
+    console.log(cartData);
     await user.save();
 
     return NextResponse.json({

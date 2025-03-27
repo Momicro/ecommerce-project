@@ -1,5 +1,5 @@
 "use client";
-import { productsDummyData, userDummyData } from "@/assets/assets";
+//import { productsDummyData, userDummyData } from "@/assets/assets";
 import { useAuth, useUser } from "@clerk/nextjs";
 import axios from "axios";
 import { useRouter } from "next/navigation";
@@ -27,6 +27,7 @@ export const AppContextProvider = (props) => {
   const fetchProductData = async () => {
     try {
       const { data } = await axios.get("/api/product/list");
+      console.log("Products: ", data);
       if (data.success) {
         setProducts(data.products);
       } else {
@@ -43,19 +44,23 @@ export const AppContextProvider = (props) => {
       const token = await getToken();
 
       //use axios to fetch user data from api/user/data and set it to userData
-      const response = await axios.get("/api/user/data", {
+      const { data } = await axios.get("/api/user/data", {
         headers: {
           Authorization: `Bearer ${token}`,
         },
       });
+
+      console.log("response: ", data);
       //const data = await response.json();
-      if (response.success) {
-        setUserData(response.user);
-        setCartItems(response.user.cartItems);
+      if (data.success) {
+        setUserData(data.data);
+        setCartItems(data.data.cartItems);
+      } else {
+        //toast.error(data.error + "error");
+        toast.error(
+          data.message || data.statusText || "An unknown error occurred"
+        );
       }
-      //else {
-      //toast.error(response.error + "error");
-      //}
     } catch (error) {
       toast.error(error.message + "catch");
       //return NextResponse.json({ success: false, message: error.message });
@@ -69,13 +74,12 @@ export const AppContextProvider = (props) => {
       cartData[itemId] = 1;
     }
     setCartItems(cartData);
-    toast.success("Item added to cart");
 
     if (user) {
       try {
         const token = await getToken();
-        const response = await axios.post(
-          "/api/user/update",
+        const { data } = await axios.post(
+          "/api/cart/update",
           { cartData },
           {
             headers: {
@@ -83,7 +87,7 @@ export const AppContextProvider = (props) => {
             },
           }
         );
-        if (response.success) {
+        if (data.success) {
           toast.success("Item added to cart");
         }
       } catch (error) {
@@ -104,8 +108,8 @@ export const AppContextProvider = (props) => {
     if (user) {
       try {
         const token = await getToken();
-        const response = await axios.post(
-          "/api/user/update",
+        const { data } = await axios.post(
+          "/api/cart/update",
           { cartData },
           {
             headers: {
@@ -113,7 +117,7 @@ export const AppContextProvider = (props) => {
             },
           }
         );
-        if (response.success) {
+        if (data.success) {
           toast.success("cart updated");
         }
       } catch (error) {
