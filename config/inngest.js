@@ -60,7 +60,7 @@ export const syncUserDeletion = inngest.createFunction(
   }
 );
 
-// create inngest function to create user's order in the database
+// create inngest function to create user's order in the mongodatabase
 export const createUserOrder = inngest.createFunction(
   {
     id: "create-user-order",
