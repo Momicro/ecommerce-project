@@ -28,7 +28,7 @@ export async function POST(request) {
 
     console.log("amount: ", amount);
     await inngest.send({
-      name: "clerk/order.created",
+      name: "order/created",
       data: {
         userId,
         address,
