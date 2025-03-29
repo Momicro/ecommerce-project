@@ -1,10 +1,7 @@
 import { NextResponse } from "next/server";
-//import connectDB from "@/config/db";
 import User from "@/models/User";
-import Order from "@/models/order";
 import { getAuth } from "@clerk/nextjs/server";
 import Product from "@/models/Product";
-//import { Inngest } from "inngest";
 import { inngest } from "@/config/inngest";
 
 // we need to create a new order and add it to the database
@@ -16,7 +13,7 @@ export async function POST(request) {
     if (!address || items === 0) {
       return NextResponse.json({ success: false, message: "Invalid data" });
     }
-    /*
+
     // calculate amount from items using reduce
     const amount = await items.reduce(async (acc, item) => {
       const product = await Product.findById(item.product);
@@ -26,24 +23,16 @@ export async function POST(request) {
           message: "Product not found",
         });
       }
-      return acc + product.offerPrice * item.quantity;
+      return (await acc) + product.offerPrice * item.quantity;
     }, 0);
-*/
-    const amount = 1000;
 
     console.log("amount: ", amount);
-
     await inngest.send({
       name: "clerk/order.created",
       data: {
-        userId: "user_2uny3yO6hsjs2IitxXq99vco8yw",
-        address: "address_2uny3yO6hsjs2IitxXq99vco8yw",
-        items: [
-          {
-            product: "test123",
-            quantity: 10,
-          },
-        ],
+        userId,
+        address,
+        items,
         amount: amount + Math.floor(amount * 0.17),
         date: Date.now(),
       },

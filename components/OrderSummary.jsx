@@ -3,7 +3,6 @@ import { useAppContext } from "@/context/AppContext";
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-hot-toast";
-import { set } from "mongoose";
 
 const OrderSummary = () => {
   const {
@@ -58,7 +57,7 @@ const OrderSummary = () => {
       }
 
       let cartItemsArray = Object.keys(cartItems).map((key) => ({
-        productId: key,
+        product: key,
         quantity: cartItems[key],
       }));
       cartItemsArray = cartItemsArray.filter((item) => item.quantity > 0);
@@ -70,7 +69,11 @@ const OrderSummary = () => {
       const token = await getToken();
       const { data } = await axios.post(
         "/api/order/create",
-        { address: selectedAddress._id, items: cartItemsArray },
+        {
+          //userId: user._id,
+          address: selectedAddress._id,
+          items: cartItemsArray, //.map((item) => ({product: item.productId, quantity: item.quantity,})),
+        },
         {
           headers: {
             Authorization: `Bearer ${token}`,
