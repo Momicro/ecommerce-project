@@ -23,9 +23,6 @@ const ProductList = () => {
         },
       });
 
-      //console.log("data");
-      //console.log(data);
-
       if (data.success) {
         setProducts(data.products);
         setLoading(false);

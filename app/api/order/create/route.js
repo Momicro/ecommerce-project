@@ -26,7 +26,6 @@ export async function POST(request) {
       return (await acc) + product.offerPrice * item.quantity;
     }, 0);
 
-    console.log("amount: ", amount);
     await inngest.send({
       name: "order/created",
       data: {

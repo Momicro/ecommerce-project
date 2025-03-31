@@ -28,7 +28,6 @@ const OrderSummary = () => {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log("Addresses: ", data);
       if (data.success) {
         setUserAddresses(data.addresses);
 
